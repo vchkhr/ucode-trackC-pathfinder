@@ -5,17 +5,12 @@ t_island *shortest_distance(t_island **unvisited) {
     t_island *shortest = NULL;
 
     if (unvisited || *unvisited) {
-        head = *unvisited;
-        shortest = *unvisited;
-
-        while (head) {
-            if (head->distTo != 0) {
-                if (shortest->distTo > head->distTo || !shortest->distTo) {
+        for (head = *unvisited, shortest = *unvisited; head; head = head->next) {
+            if (head->destination != 0) {
+                if (shortest->destination > head->destination || !shortest->destination) {
                     shortest = head;
                 }
             }
-
-            head = head->next;
         }
     }
     

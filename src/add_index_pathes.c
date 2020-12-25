@@ -3,18 +3,13 @@
 int add_index_pathes(t_path **path) {
     t_path *indexed = *path;
     t_path *bonds = NULL;
-    int i = 0;
+    int i;
 
-    for (; indexed; indexed = indexed->nextPath) {
-        bonds = indexed;
-
-        while (bonds) {
+    for (i = 0; indexed; indexed = indexed->nextPath, i++) {
+        for (bonds = indexed; bonds; bonds = bonds->nextConnect) {
             bonds->index = i;
-            bonds = bonds->nextConnect;
         }
-
-        i++;
     }
-    
+     
     return i;
 }

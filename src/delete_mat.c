@@ -1,21 +1,16 @@
 #include "../inc/pathfinder.h"
 
-void delete_mat(int ***matrix, char **set) {
+void delete_matrix(int ***matrix, char **set) {
     int **mat = *matrix;
-    int i = 0;
+    int i;
 
-    while (set[i]) {
+    for (i = 0; set[i];) {
         i++;
     }
-    
-    while (i >= 0) {
+    for (; i >= 0; mat++, i--) {
         free(*mat);
-
-        mat++;
-        i--;
     }
 
-    free(*matrix);
-    
+    free(*matrix);    
     *matrix = NULL;
 }

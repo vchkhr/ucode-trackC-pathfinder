@@ -1,24 +1,18 @@
 #include "../inc/pathfinder.h"
 
-void join(char **res, char *s2) {
-    char *newstr = mx_strnew(mx_strlen(*res) + mx_strlen(s2));
-    int i = 0;
-    int si = -1;
-    char *s1 = *res;
+void join(char **result, char *string) {
+    char *new_string = mx_strnew(mx_strlen(*result) + mx_strlen(string));
+    int position = -1;
+    int n = 0;
 
-    while (s1[++si]) {
-        newstr[i] = s1[si];
-        i++;
+    for (char *string_test = *result; string_test[++position]; n++) {
+        new_string[n] = string_test[position];
     }
 
-    si = -1;
-
-    while (s2[++si]) {
-        newstr[i] = s2[si];
-        i++;
+    for (position = -1; string[++position]; n++) {
+        new_string[n] = string[position];
     }
 
-    mx_strdel(&(*res));
-    
-    *res = newstr;
+    mx_strdel(&(*result));
+    *result = new_string;
 }

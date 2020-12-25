@@ -1,14 +1,14 @@
 #include "../inc/pathfinder.h"
 
-void parsing(char *fd, int ***matrix, char ***set) {
-    char **arrarr = NULL;
-    char **src = mx_strsplit(fd, '\n');
+void parse_file(char *file, int ***matrix, char ***set) {
+    char **arr_x2 = NULL;
+    char **src = mx_strsplit(file, '\n');
 
-    create_arr(src, &arrarr);
-    create_set(&(*set), &arrarr, src[0]);
+    create_array(src, &arr_x2);
+    create_set(&(*set), &arr_x2, src[0]);
 
-    *matrix = create_matrix(*set, &arrarr);
+    *matrix = create_matrix(*set, &arr_x2);
     
     mx_del_strarr(&src);
-    mx_del_strarr(&arrarr);
+    mx_del_strarr(&arr_x2);
 }

@@ -1,41 +1,37 @@
 #include "../inc/pathfinder.h"
 
-static void firs_if (t_island *temp, t_island *leftOne, int index) {
-    if (temp && temp->indexIsland == index) {
-        if (temp->next) {
-            leftOne->next = temp->next;
-        }
-        else {
-            leftOne->next = NULL;
-        }
-
-        delete_path(&temp->path);
-        free(temp);
-        
-        temp = NULL;
-    }
-}
-
 void island_pop_middle(t_island **unvisited, int index) {
-    t_island *temp = NULL;
-    t_island *leftOne = NULL;
-
     if (!unvisited || !(*unvisited)) {
         return;
     }
-    if ((*unvisited)->indexIsland == index) {
+    
+    t_island *temp = NULL;
+    t_island *leftFirst = NULL;
+
+    if ((*unvisited)->islandID == index) {
         delete_path(&((*unvisited)->path));
         island_pop_front(&(*unvisited));
     }
     else {
         temp = *unvisited;
-        leftOne = temp;
+        leftFirst = temp;
 
-        while (temp != NULL && temp->indexIsland != index) {
-            leftOne = temp;
+        for (; temp != NULL && temp->islandID != index;) {
+            leftFirst = temp;
             temp = temp->next;
         }
         
-        firs_if (temp, leftOne, index);
+        if (temp && temp->islandID == index) {
+            if (temp->next) {
+                leftFirst->next = temp->next;
+            }
+            else {
+                leftFirst->next = NULL;
+            }
+
+            delete_path(&temp->path);
+            free(temp);
+            temp = NULL;
+        }
     }
 }

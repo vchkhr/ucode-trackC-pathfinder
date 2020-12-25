@@ -1,12 +1,11 @@
 #include "../inc/pathfinder.h"
 
-void add_link(t_path **cur, t_path **new) {
-    t_path *current = *cur;
+void add_link(t_path **current_path_pointer, t_path **new) {
+    t_path *current_path = *current_path_pointer;
 
-    while (current->nextConnect) {
-        current->nextPath = *new;
-        current = current->nextConnect;
+    for (; current_path->nextConnect; current_path = current_path->nextConnect) {
+        current_path->nextPath = *new;
     }
     
-    current->nextPath = *new;
+    current_path->nextPath = *new;
 }

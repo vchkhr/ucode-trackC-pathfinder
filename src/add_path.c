@@ -1,30 +1,27 @@
 #include "../inc/pathfinder.h"
 
-t_path *add_path(t_path **previous, int isl, int dist) {
-    t_path *cur = NULL;
-    t_path *res = NULL;
+t_path *add_path(t_path **previous, int island, int distance) {
+    t_path *current = NULL;
     t_path *new = NULL;
+    t_path *result = NULL;
     t_path *fast = NULL;
 
     if (*previous) {
-        cur = *previous;
+        current = *previous;
     }
 
-    res = add_one_path(&cur, isl, dist);
-    fast = res;
+    result = add_one_path(&current, island, distance);
+    fast = result;
 
-    if (cur) {
-        cur = cur->nextPath;
+    if (current) {
+        current = current->nextPath;
     }
 
-    while (cur) {
-        new = add_one_path(&cur, isl, dist);
-
+    for (; current; current = current->nextPath) {
+        new = add_one_path(&current, island, distance);
         add_link(&fast, &new);
-
         fast = fast->nextPath;
-        cur = cur->nextPath;
     }
     
-    return res;
+    return result;
 }

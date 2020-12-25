@@ -1,0 +1,13 @@
+Command:
+zsh run.sh; make; ./pathfinder test/no; ./pathfinder test/empty; ./pathfinder test/invalid1; ./pathfinder test/invalid2; ./pathfinder test/invalid3; make uninstall
+
+Expected output:
+PASSED
+PASSED
+PASSED
+PASSED
+error: file test/no does not exist
+error: file test/empty is empty
+error: line 1 is not valid
+error: line 3 is not valid
+error: invalid number of islands

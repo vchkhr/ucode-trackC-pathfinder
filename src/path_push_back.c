@@ -1,22 +1,20 @@
 #include "../inc/pathfinder.h"
 
 void path_push_back(t_path **path, t_path **previous, int isl, int dist) {
-    t_path *last = *path;
-    t_path *cur = *previous;
+    t_path *current = *previous;
     t_path *new = NULL;
+    t_path *last = *path;
     
-    while (last->nextPath != NULL) {
+    for (; last->nextPath != NULL;) {
         last = last->nextPath;
     }
-    while (cur) {
-        new = add_one_path(&cur, isl, dist);
+    for (; current; current = current->nextPath) {
+        new = add_one_path(&current, isl, dist);
 
-        if (unique_path(&new, &(*path)) == 1) {
+        if (get_unique_path(&new, &(*path)) == 1) {
             add_link(&last, &new);
 
             last = last->nextPath;
         }
-        
-        cur = cur->nextPath;
     }
 }

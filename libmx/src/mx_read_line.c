@@ -1,47 +1,46 @@
 #include "libmx.h"
 
 int mx_read_line(char **lineptr, size_t buf_size, char delim, const int fd) {
-    if (buf_size < 0 || fd < 0) {
+    if (buf_size == 0) {
         return -2;
     }
 
-    (*lineptr) = (char *) mx_realloc(*lineptr, buf_size);
-    mx_memset((*lineptr), '\0', malloc_size((*lineptr))); // For macOS
-    // mx_memset((*lineptr), '\0', malloc_usable_size((*lineptr))); // For Linux
-    size_t bytes = 0;
-    char buf;
+    int res = 0;
+    int bytes;
+    char *temp = *lineptr;
 
-    if (read(fd, &buf, 1)) {
-        if (buf == delim) {
-            return bytes;
+    *lineptr = NULL;
+    buf_size = 1;
+
+    char *buffer;
+
+    for (buffer = mx_strnew(buf_size); (bytes = read(fd, buffer, buf_size)) > 0; res += bytes) {
+        if (mx_get_char_index(buffer, delim) >= 0) {
+            buffer[mx_get_char_index(buffer, delim)] = '\0';
+            *lineptr = mx_strjoin_free(*lineptr, buffer);
+            res += mx_strlen(buffer);
+            free(buffer);
+            free(temp);
+
+            return res;
         }
 
-        (*lineptr) = (char *) mx_realloc(*lineptr, bytes + 1);
-        (*lineptr)[bytes] = buf;
-        bytes++;
-    }
-    else {
-        return -1;
+        *lineptr = mx_strjoin_free(*lineptr, buffer);
     }
 
-    while (read(fd, &buf, 1)) {
-        if (buf == delim) {
-            break;
+    if (res == 0) {
+        *lineptr = temp;
+        free(buffer);
+
+        if (bytes == -1) {
+            return -2;
         }
-        
-        if (bytes >= buf_size) {
-            (*lineptr) = (char *) mx_realloc(*lineptr, bytes + 1);
+        else {
+            return -1;
         }
-
-        (*lineptr)[bytes] = buf;
-        bytes++;
     }
 
-    (*lineptr) = (char *) mx_realloc(*lineptr, bytes + 1);
-
-    size_t free_bytes = malloc_size((*lineptr)) - bytes; // For macOS
-    // size_t free_bytes = malloc_usable_size((*lineptr)) - bytes; // For Linux
-    mx_memset(&(*lineptr)[bytes], '\0', free_bytes);
-
-    return bytes + 1;
+    free(buffer);
+    
+    return res;
 }
